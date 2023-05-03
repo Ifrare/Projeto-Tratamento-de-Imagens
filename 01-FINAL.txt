@@ -1,0 +1,31 @@
+PImage groundtruth;
+PImage original;
+PImage output;
+
+void setup() {
+  size(426, 640);
+  groundtruth = loadImage("PB-SOMA.jpg");
+  original = loadImage("01.jpg");
+  output = createImage(groundtruth.width, groundtruth.height, RGB);
+  process();
+}
+
+void draw() {
+  background(255);
+  image(output, 0, 0);
+}
+
+void process() {
+  for (int y = 0; y < groundtruth.height; y++) {
+    for (int x = 0; x < groundtruth.width; x++) {
+      int groundtruthPixel = groundtruth.get(x, y);
+      if (brightness(groundtruthPixel) < 128) {  // pixel preto
+        output.set(x, y, color(0));
+      } else {  // pixel branco
+        int originalPixel = original.get(x, y);
+        output.set(x, y, originalPixel);
+      }
+    }
+  }
+  save("01-FINAL.jpg");
+}
